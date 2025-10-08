@@ -113,7 +113,7 @@ const directionsData = {
             },
             {
                 id: 3,
-                type: 'interactive',
+                type: 'info',
                 title: 'Экологический след',
                 description: 'Рассчитайте свой экологический след и узнайте, как его уменьшить',
                 interactive: 'footprintCalculator',
@@ -129,7 +129,7 @@ const directionsData = {
             },
             {
                 id: 5,
-                type: 'interactive',
+                type: 'info',
                 title: 'Защита водоемов',
                 description: 'Узнайте о мерах защиты озер и рек Карелии',
                 interactive: 'waterProtection',
@@ -157,7 +157,7 @@ const directionsData = {
             },
             {
                 id: 2,
-                type: 'interactive',
+                type: 'info',
                 title: 'Виртуальный музей',
                 description: 'Изучите экспонаты музея Карелии',
                 interactive: 'virtualMuseum',
@@ -165,7 +165,7 @@ const directionsData = {
             },
             {
                 id: 3,
-                type: 'interactive',
+                type: 'info',
                 title: 'Собери памятник',
                 description: 'Восстановите внешний вид исторического памятника',
                 interactive: 'monumentBuilder',
@@ -225,7 +225,7 @@ const directionsData = {
             },
             {
                 id: 4,
-                type: 'interactive',
+                type: 'info',
                 title: 'План помощи',
                 description: 'Составьте план помощи для конкретной ситуации',
                 interactive: 'helpPlan',
@@ -264,7 +264,7 @@ function loadDirectionsList() {
             <p>${direction.description.substring(0, 100)}...</p>
             <div class="direction-stats">
                 <div class="stat">
-                    <span class="stat-number">${direction.stats.volunteers}</span>
+                    <span class="stat-number">${direction.stats.volunteers.toLocaleString()}</span>
                     <span class="stat-label">волонтеров</span>
                 </div>
             </div>
@@ -338,10 +338,10 @@ function loadTasks(tasks, directionId) {
             <div class="task-description">${task.description}</div>
             <div class="task-actions">
                 ${!taskCompleted ? 
-                    `<button onclick="startTask('${directionId}', ${task.id})" class="btn btn-small btn-complete">
+                    `<button type="button" onclick="startTask('${directionId}', ${task.id})" class="btn btn-small btn-complete">
                         Начать выполнение
                     </button>` : 
-                    `<button onclick="undoTask('${directionId}', ${task.id})" class="btn btn-small btn-secondary">
+                    `<button type="button" onclick="undoTask('${directionId}', ${task.id})" class="btn btn-small btn-secondary">
                         Отменить выполнение
                     </button>`
                 }
@@ -372,7 +372,7 @@ function startTask(directionId, taskId) {
             <div class="interactive-task">
                 <h4>${task.title}</h4>
                 <p>${task.description}</p>
-                <button onclick="completeTask('${directionId}', ${taskId})" class="btn btn-primary">
+                <button type="button" onclick="completeTask('${directionId}', ${taskId})" class="btn btn-primary">
                     Отметить как выполненное
                 </button>
             </div>
@@ -387,8 +387,6 @@ function completeTask(directionId, taskId) {
         progress.push(taskId);
         saveProgress(directionId, progress);
         loadTasks(directionsData[directionId].tasks, directionId);
-        
-        // Показать уведомление
         showNotification('Задание выполнено! 🎉', 'success');
     }
 }
@@ -518,7 +516,7 @@ const interactiveGames = {
                     
                     <div class="game-feedback" id="sorting-feedback" style="display: none;"></div>
                     
-                    <button onclick="checkSorting('${directionId}', ${taskId})" class="btn btn-check" id="check-sorting">
+                    <button type="button" onclick="checkSorting('${directionId}', ${taskId})" class="btn btn-check" id="check-sorting">
                         Проверить сортировку
                     </button>
                 </div>
@@ -576,7 +574,7 @@ const interactiveGames = {
                             ${optionsHTML}
                         </div>
                         <div class="quiz-progress">
-                            <button onclick="nextQuizQuestion('${directionId}', ${taskId})" 
+                            <button type="button" onclick="nextQuizQuestion('${directionId}', ${taskId})" 
                                     class="btn btn-primary" 
                                     ${currentQuestion === quizQuestions.length - 1 ? '' : 'style="display: none;"'}
                                     id="quiz-finish">
@@ -595,51 +593,6 @@ const interactiveGames = {
         }
 
         renderQuestion();
-
-        window.selectQuizAnswer = function(questionIndex, answerIndex) {
-            currentQuizAnswers[questionIndex] = answerIndex;
-            const options = container.querySelectorAll('.quiz-option');
-            options.forEach(opt => opt.classList.remove('selected'));
-            options[answerIndex].classList.add('selected');
-            
-            // Показать кнопку завершения если это последний вопрос
-            if (questionIndex === quizQuestions.length - 1) {
-                document.getElementById('quiz-finish').style.display = 'block';
-            }
-        };
-
-        window.nextQuizQuestion = function(dirId, tId) {
-            if (currentQuestion < quizQuestions.length - 1) {
-                currentQuestion++;
-                renderQuestion();
-            } else {
-                checkQuizResults(dirId, tId);
-            }
-        };
-
-        window.checkQuizResults = function(dirId, tId) {
-            let correctCount = 0;
-            quizQuestions.forEach((question, index) => {
-                if (currentQuizAnswers[index] === question.correct) {
-                    correctCount++;
-                }
-            });
-
-            const percentage = (correctCount / quizQuestions.length) * 100;
-            const isPassed = percentage >= 70;
-
-            container.innerHTML += `
-                <div class="game-feedback ${isPassed ? 'feedback-correct' : 'feedback-incorrect'}">
-                    ${isPassed ? '🎉 Отлично! ' : '😔 Попробуйте еще раз! '}
-                    Вы ответили правильно на ${correctCount} из ${quizQuestions.length} вопросов.
-                    ${isPassed ? 'Задание выполнено!' : 'Нужно набрать минимум 70% правильных ответов.'}
-                </div>
-            `;
-
-            if (isPassed) {
-                completeTask(dirId, tId);
-            }
-        };
     },
 
     // Ситуации помощи для социального волонтерства
@@ -690,7 +643,7 @@ const interactiveGames = {
                         <div class="response-options">
                             ${optionsHTML}
                         </div>
-                        <button onclick="checkScenarioAnswer('${directionId}', ${taskId})" 
+                        <button type="button" onclick="checkScenarioAnswer('${directionId}', ${taskId})" 
                                 class="btn btn-check" 
                                 id="check-scenario">
                             Проверить ответ
@@ -710,52 +663,117 @@ const interactiveGames = {
         }
 
         renderScenario();
+    }
+};
 
-        window.selectScenarioAnswer = function(scenarioIndex, answerIndex) {
-            currentScenarioAnswers[scenarioIndex] = answerIndex;
-            const options = container.querySelectorAll('.response-option');
-            options.forEach(opt => opt.classList.remove('selected'));
-            options[answerIndex].classList.add('selected');
-            document.getElementById('check-scenario').disabled = false;
-        };
+// Глобальные функции для игр
+window.selectQuizAnswer = function(questionIndex, answerIndex) {
+    currentQuizAnswers[questionIndex] = answerIndex;
+    const options = document.querySelectorAll('.quiz-option');
+    options.forEach(opt => opt.classList.remove('selected'));
+    options[answerIndex].classList.add('selected');
+    
+    // Показать кнопку завершения если это последний вопрос
+    if (questionIndex === currentQuizAnswers.length - 1) {
+        const finishBtn = document.getElementById('quiz-finish');
+        if (finishBtn) finishBtn.style.display = 'block';
+    }
+};
 
-        window.checkScenarioAnswer = function(dirId, tId) {
-            const scenario = scenarios[currentScenario];
-            const userAnswer = currentScenarioAnswers[currentScenario];
-            const isCorrect = userAnswer === scenario.correct;
+window.nextQuizQuestion = function(dirId, tId) {
+    const quizQuestions = [
+        { correct: 2 }, { correct: 1 }, { correct: 0 }, { correct: 0 }
+    ];
+    
+    if (currentQuizAnswers.length < quizQuestions.length - 1) {
+        currentQuizAnswers.push(undefined);
+        interactiveGames.ecologyQuiz(document.getElementById('tasksContainer'), tId, dirId);
+    } else {
+        checkQuizResults(dirId, tId);
+    }
+};
 
-            const options = container.querySelectorAll('.response-option');
-            options.forEach((opt, index) => {
-                if (index === scenario.correct) {
-                    opt.classList.add('correct');
-                }
-                if (index === userAnswer && !isCorrect) {
-                    opt.classList.add('incorrect');
-                }
-            });
+window.checkQuizResults = function(dirId, tId) {
+    const quizQuestions = [
+        { correct: 2 }, { correct: 1 }, { correct: 0 }, { correct: 0 }
+    ];
+    
+    let correctCount = 0;
+    quizQuestions.forEach((question, index) => {
+        if (currentQuizAnswers[index] === question.correct) {
+            correctCount++;
+        }
+    });
 
-            if (currentScenario < scenarios.length - 1) {
-                currentScenario++;
-                setTimeout(() => renderScenario(), 2000);
-            } else {
-                // Проверяем все ответы
-                const allCorrect = scenarios.every((scenario, index) => 
-                    currentScenarioAnswers[index] === scenario.correct
-                );
+    const percentage = (correctCount / quizQuestions.length) * 100;
+    const isPassed = percentage >= 70;
 
-                container.innerHTML += `
-                    <div class="game-feedback ${allCorrect ? 'feedback-correct' : 'feedback-incorrect'}">
-                        ${allCorrect ? 
-                            '🎉 Отлично! Вы правильно реагируете в социальных ситуациях. Задание выполнено!' : 
-                            '📚 Есть над чем поработать. Изучите материалы о правильном общении с разными группами людей.'}
-                    </div>
-                `;
+    const container = document.getElementById('tasksContainer');
+    if (container) {
+        container.innerHTML += `
+            <div class="game-feedback ${isPassed ? 'feedback-correct' : 'feedback-incorrect'}">
+                ${isPassed ? '🎉 Отлично! ' : '😔 Попробуйте еще раз! '}
+                Вы ответили правильно на ${correctCount} из ${quizQuestions.length} вопросов.
+                ${isPassed ? 'Задание выполнено!' : 'Нужно набрать минимум 70% правильных ответов.'}
+            </div>
+        `;
+    }
 
-                if (allCorrect) {
-                    completeTask(dirId, tId);
-                }
-            }
-        };
+    if (isPassed) {
+        completeTask(dirId, tId);
+    }
+};
+
+window.selectScenarioAnswer = function(scenarioIndex, answerIndex) {
+    currentScenarioAnswers[scenarioIndex] = answerIndex;
+    const options = document.querySelectorAll('.response-option');
+    options.forEach(opt => opt.classList.remove('selected'));
+    options[answerIndex].classList.add('selected');
+    document.getElementById('check-scenario').disabled = false;
+};
+
+window.checkScenarioAnswer = function(dirId, tId) {
+    const scenarios = [
+        { correct: 0 }, { correct: 2 }
+    ];
+    
+    const scenario = scenarios[currentScenarioAnswers.length - 1];
+    const userAnswer = currentScenarioAnswers[currentScenarioAnswers.length - 1];
+    const isCorrect = userAnswer === scenario.correct;
+
+    const options = document.querySelectorAll('.response-option');
+    options.forEach((opt, index) => {
+        if (index === scenario.correct) {
+            opt.classList.add('correct');
+        }
+        if (index === userAnswer && !isCorrect) {
+            opt.classList.add('incorrect');
+        }
+    });
+
+    if (currentScenarioAnswers.length < scenarios.length) {
+        currentScenarioAnswers.push(undefined);
+        setTimeout(() => interactiveGames.helpScenarios(document.getElementById('tasksContainer'), tId, dirId), 2000);
+    } else {
+        // Проверяем все ответы
+        const allCorrect = scenarios.every((scenario, index) => 
+            currentScenarioAnswers[index] === scenario.correct
+        );
+
+        const container = document.getElementById('tasksContainer');
+        if (container) {
+            container.innerHTML += `
+                <div class="game-feedback ${allCorrect ? 'feedback-correct' : 'feedback-incorrect'}">
+                    ${allCorrect ? 
+                        '🎉 Отлично! Вы правильно реагируете в социальных ситуациях. Задание выполнено!' : 
+                        '📚 Есть над чем поработать. Изучите материалы о правильном общении с разными группами людей.'}
+                </div>
+            `;
+        }
+
+        if (allCorrect) {
+            completeTask(dirId, tId);
+        }
     }
 };
 
