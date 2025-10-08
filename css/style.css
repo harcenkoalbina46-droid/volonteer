@@ -1,4 +1,3 @@
-text
 * {
     margin: 0;
     padding: 0;
@@ -190,6 +189,8 @@ nav ul li a.active {
     transition: all 0.3s;
     border: none;
     cursor: pointer;
+    font-family: inherit;
+    font-size: 1rem;
 }
 
 .btn-primary {
@@ -215,42 +216,31 @@ nav ul li a.active {
 /* Сетка направлений */
 .directions-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-    gap: 2rem;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 2rem;
 }
 
 .direction-card {
     background: white;
-    padding: 2rem;
+    padding: 1.5rem;
     border-radius: 10px;
     box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-    border: 1px solid #e9ecef;
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    border: 2px solid #e9ecef;
+    transition: all 0.3s ease;
+    cursor: pointer;
 }
 
 .direction-card:hover {
     transform: translateY(-5px);
     box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+    border-color: #4a7c59;
 }
 
 .direction-card h3 {
     color: #2c5530;
     margin-bottom: 1rem;
     font-size: 1.3rem;
-}
-
-.direction-card h4 {
-    color: #4a7c59;
-    margin: 1.5rem 0 1rem 0;
-}
-
-.tasks ol {
-    margin-left: 1.5rem;
-}
-
-.tasks li {
-    margin-bottom: 0.5rem;
-    padding-left: 0.5rem;
 }
 
 /* Список организаций */
@@ -290,6 +280,402 @@ nav ul li a.active {
 .org-contact p {
     margin: 0.5rem 0;
     color: #666;
+}
+
+/* Стили для детальной информации о направлении */
+.direction-detail {
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+    padding: 2rem;
+    margin-top: 2rem;
+}
+
+.detail-header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 2rem;
+    padding-bottom: 1rem;
+    border-bottom: 2px solid #e9ecef;
+}
+
+.btn-back {
+    background: #6c757d;
+    color: white;
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-right: 1rem;
+    font-family: inherit;
+}
+
+.btn-back:hover {
+    background: #545b62;
+}
+
+.detail-content {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 3rem;
+}
+
+.direction-info h3,
+.tasks-section h3 {
+    color: #2c5530;
+    margin-bottom: 1rem;
+}
+
+/* Статистика направления */
+.direction-stats {
+    display: flex;
+    justify-content: space-around;
+    background: #f8f9fa;
+    padding: 1.5rem;
+    border-radius: 10px;
+    margin-top: 1.5rem;
+}
+
+.stat {
+    text-align: center;
+}
+
+.stat-number {
+    display: block;
+    font-size: 2rem;
+    font-weight: bold;
+    color: #4a7c59;
+}
+
+.stat-label {
+    font-size: 0.9rem;
+    color: #666;
+}
+
+/* Задания */
+.tasks-container {
+    margin: 1.5rem 0;
+}
+
+.task-item {
+    background: #f8f9fa;
+    padding: 1rem;
+    margin-bottom: 1rem;
+    border-radius: 8px;
+    border-left: 4px solid #dee2e6;
+    transition: all 0.3s ease;
+}
+
+.task-item:hover {
+    background: #e9f5eb;
+    border-left-color: #4a7c59;
+}
+
+.task-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.5rem;
+}
+
+.task-title {
+    font-weight: bold;
+    color: #333;
+    flex-grow: 1;
+}
+
+.task-status {
+    padding: 0.25rem 0.75rem;
+    border-radius: 15px;
+    font-size: 0.8rem;
+    font-weight: bold;
+}
+
+.status-pending {
+    background: #fff3cd;
+    color: #856404;
+}
+
+.status-completed {
+    background: #d1edff;
+    color: #0c5460;
+}
+
+.task-description {
+    color: #666;
+    font-size: 0.9rem;
+    margin-bottom: 0.5rem;
+}
+
+.task-actions {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.btn-small {
+    padding: 0.3rem 0.8rem;
+    font-size: 0.8rem;
+}
+
+.btn-complete {
+    background: #28a745;
+    color: white;
+}
+
+.btn-complete:hover {
+    background: #218838;
+}
+
+.btn-complete:disabled {
+    background: #6c757d;
+    cursor: not-allowed;
+}
+
+/* Прогресс */
+.progress-section {
+    background: #e9f5eb;
+    padding: 1.5rem;
+    border-radius: 10px;
+    margin-top: 2rem;
+}
+
+.progress-bar {
+    width: 100%;
+    height: 20px;
+    background: #dee2e6;
+    border-radius: 10px;
+    overflow: hidden;
+    margin: 1rem 0;
+}
+
+.progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #4a7c59, #2c5530);
+    transition: width 0.5s ease;
+    border-radius: 10px;
+}
+
+/* Стили для интерактивных заданий */
+.interactive-task {
+    background: white;
+    border: 2px solid #e9ecef;
+    border-radius: 10px;
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+}
+
+.interactive-task h4 {
+    color: #2c5530;
+    margin-bottom: 1rem;
+}
+
+.interactive-task p {
+    color: #666;
+    margin-bottom: 1rem;
+}
+
+/* Сортировка мусора */
+.sorting-game {
+    background: #f8f9fa;
+    padding: 1.5rem;
+    border-radius: 8px;
+}
+
+.sorting-area {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 1rem;
+    margin: 1rem 0;
+}
+
+.sorting-bin {
+    background: white;
+    border: 2px dashed #dee2e6;
+    border-radius: 8px;
+    padding: 1rem;
+    text-align: center;
+    min-height: 150px;
+    transition: border-color 0.3s ease;
+}
+
+.sorting-bin h5 {
+    margin-bottom: 0.5rem;
+    color: #2c5530;
+}
+
+.bin-plastic { border-color: #007bff; }
+.bin-paper { border-color: #28a745; }
+.bin-glass { border-color: #fd7e14; }
+.bin-metal { border-color: #6f42c1; }
+.bin-organic { border-color: #795548; }
+
+.trash-items {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin: 1rem 0;
+    justify-content: center;
+}
+
+.trash-item {
+    background: white;
+    border: 2px solid #dee2e6;
+    border-radius: 8px;
+    padding: 0.5rem 1rem;
+    cursor: grab;
+    user-select: none;
+    transition: all 0.3s ease;
+}
+
+.trash-item:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.trash-item.dragging {
+    opacity: 0.5;
+}
+
+.game-feedback {
+    margin-top: 1rem;
+    padding: 1rem;
+    border-radius: 5px;
+    text-align: center;
+    font-weight: bold;
+}
+
+.feedback-correct {
+    background: #d4edda;
+    color: #155724;
+    border: 1px solid #c3e6cb;
+}
+
+.feedback-incorrect {
+    background: #f8d7da;
+    color: #721c24;
+    border: 1px solid #f5c6cb;
+}
+
+/* Викторина */
+.quiz-container {
+    background: #f8f9fa;
+    padding: 1.5rem;
+    border-radius: 8px;
+}
+
+.quiz-question {
+    font-weight: bold;
+    margin-bottom: 1rem;
+    color: #2c5530;
+}
+
+.quiz-options {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.quiz-option {
+    background: white;
+    border: 2px solid #dee2e6;
+    border-radius: 5px;
+    padding: 0.75rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-family: inherit;
+}
+
+.quiz-option:hover {
+    background: #e9f5eb;
+    border-color: #4a7c59;
+}
+
+.quiz-option.selected {
+    background: #4a7c59;
+    color: white;
+    border-color: #2c5530;
+}
+
+.quiz-option.correct {
+    background: #d4edda;
+    border-color: #28a745;
+    color: #155724;
+}
+
+.quiz-option.incorrect {
+    background: #f8d7da;
+    border-color: #dc3545;
+    color: #721c24;
+}
+
+/* Социальные ситуации */
+.situation-game {
+    background: #f8f9fa;
+    padding: 1.5rem;
+    border-radius: 8px;
+}
+
+.situation-scenario {
+    background: white;
+    padding: 1rem;
+    border-radius: 5px;
+    margin-bottom: 1rem;
+    border-left: 4px solid #4a7c59;
+}
+
+.response-options {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1rem;
+}
+
+.response-option {
+    background: white;
+    border: 2px solid #dee2e6;
+    border-radius: 8px;
+    padding: 1rem;
+    cursor: pointer;
+    text-align: center;
+    transition: all 0.3s ease;
+    font-family: inherit;
+}
+
+.response-option:hover {
+    transform: translateY(-2px);
+    border-color: #4a7c59;
+}
+
+.response-option.selected {
+    background: #4a7c59;
+    color: white;
+    border-color: #2c5530;
+}
+
+/* Кнопка проверки */
+.btn-check {
+    background: #28a745;
+    color: white;
+    margin-top: 1rem;
+}
+
+.btn-check:hover {
+    background: #218838;
+}
+
+.btn-check:disabled {
+    background: #6c757d;
+    cursor: not-allowed;
+}
+
+/* Анимации */
+@keyframes celebrate {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.1); }
+    100% { transform: scale(1); }
+}
+
+.celebrate {
+    animation: celebrate 0.5s ease-in-out;
 }
 
 /* Секция возврата */
@@ -348,6 +734,34 @@ footer {
     .direction-card {
         padding: 1.5rem;
     }
+
+    .detail-content {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+    }
+
+    .direction-stats {
+        flex-direction: column;
+        gap: 1rem;
+    }
+
+    .detail-header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .btn-back {
+        margin-bottom: 1rem;
+        margin-right: 0;
+    }
+
+    .sorting-area {
+        grid-template-columns: 1fr;
+    }
+
+    .response-options {
+        grid-template-columns: 1fr;
+    }
 }
 
 @media (max-width: 480px) {
@@ -369,5 +783,19 @@ footer {
 
     .timeline {
         grid-template-columns: 1fr;
+    }
+
+    .task-actions {
+        flex-direction: column;
+    }
+
+    .trash-items {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .trash-item {
+        width: 100%;
+        text-align: center;
     }
 }
