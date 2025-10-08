@@ -107,3 +107,4 @@ function showNotification(message, type = 'info') {
     
     setTimeout(() => {
         notification.style.transform
+Add JavaScript functionality
